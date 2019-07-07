@@ -1,6 +1,7 @@
 {
   "name": "makeschoool-challenge",
   "dependencies": {
+    "axios": "^0.19.0",
     "http-server": "^0.11.1",
     "twitter-proxy": "^2.0.0"
   },
