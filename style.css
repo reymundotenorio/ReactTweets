@@ -10,3 +10,7 @@
 .retweet-container .retweet-content{
    color: #DB3A34;
 }
+
+button.btn-dark{
+  margin: 5px;
+}
