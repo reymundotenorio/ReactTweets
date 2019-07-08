@@ -110,30 +110,29 @@ class VersaTweets extends React.Component {
 
         {/* Change Tweets count */}
         <form className="form-inline" onSubmit={this.handleSubmit}>
-          <label for="count" className="mr-sm-2">
+          <label htmlFor="count" className="mr-sm-2">
             Tweets:
           </label>
           <input
             type="number"
             className="form-control mb-2 mr-sm-2"
             name="count"
+            min="1"
+            max="30"
             value={this.state.count}
             onChange={this.handleChange}
           />
-          <button type="submit" class="btn btn-primary mb-2">
+          <button type="submit" className="btn btn-primary mb-2">
             Submit
           </button>
         </form>
 
         {tweets.map(item => {
           return (
-            <React.Fragment>
-              {item.retweeted_status && (
-                <Retweet key={`${item.id_str}_00`} retweetUsername={item.retweeted_status.user.screen_name} />
-              )}
+            <React.Fragment key={item.id_str}>
+              {item.retweeted_status && <Retweet retweetUsername={item.retweeted_status.user.screen_name} />}
 
               <Tweet
-                key={item.id_str}
                 content={item.text}
                 date={item.created_at}
                 link={`https://twitter.com/i/web/status/${item.id_str}`}
@@ -221,30 +220,29 @@ class RainAgencyTweets extends React.Component {
 
         {/* Change Tweets count */}
         <form className="form-inline" onSubmit={this.handleSubmit}>
-          <label for="count" className="mr-sm-2">
+          <label htmlFor="count" className="mr-sm-2">
             Tweets:
           </label>
           <input
             type="number"
             className="form-control mb-2 mr-sm-2"
             name="count"
+            min="1"
+            max="30"
             value={this.state.count}
             onChange={this.handleChange}
           />
-          <button type="submit" class="btn btn-primary mb-2">
+          <button type="submit" className="btn btn-primary mb-2">
             Submit
           </button>
         </form>
 
         {tweets.map(item => {
           return (
-            <React.Fragment>
-              {item.retweeted_status && (
-                <Retweet key={`${item.id_str}_00`} retweetUsername={item.retweeted_status.user.screen_name} />
-              )}
+            <React.Fragment key={item.id_str}>
+              {item.retweeted_status && <Retweet retweetUsername={item.retweeted_status.user.screen_name} />}
 
               <Tweet
-                key={item.id_str}
                 content={item.text}
                 date={item.created_at}
                 link={`https://twitter.com/i/web/status/${item.id_str}`}
@@ -332,30 +330,29 @@ class AlexaDevsTweets extends React.Component {
 
         {/* Change Tweets count */}
         <form className="form-inline" onSubmit={this.handleSubmit}>
-          <label for="count" className="mr-sm-2">
+          <label htmlFor="count" className="mr-sm-2">
             Tweets:
           </label>
           <input
             type="number"
             className="form-control mb-2 mr-sm-2"
             name="count"
+            min="1"
+            max="30"
             value={this.state.count}
             onChange={this.handleChange}
           />
-          <button type="submit" class="btn btn-primary mb-2">
+          <button type="submit" className="btn btn-primary mb-2">
             Submit
           </button>
         </form>
 
         {tweets.map(item => {
           return (
-            <React.Fragment>
-              {item.retweeted_status && (
-                <Retweet key={`${item.id_str}_00`} retweetUsername={item.retweeted_status.user.screen_name} />
-              )}
+            <React.Fragment key={item.id_str}>
+              {item.retweeted_status && <Retweet retweetUsername={item.retweeted_status.user.screen_name} />}
 
               <Tweet
-                key={item.id_str}
                 content={item.text}
                 date={item.created_at}
                 link={`https://twitter.com/i/web/status/${item.id_str}`}
@@ -368,15 +365,53 @@ class AlexaDevsTweets extends React.Component {
   }
 }
 
+// Sort array
+function sort_by_key(array, key) {
+  return array.sort(function(a, b) {
+    var x = a[key];
+    var y = b[key];
+    return x < y ? -1 : x > y ? 1 : 0;
+  });
+}
+
 // AlexaDevsTweets component
 class AppComponent extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      layout: ["versa_agency", "alexa_devs", "rain_agency"],
+      layout: [
+        { name: "versa_agency", position: 1 },
+        { name: "alexa_devs", position: 2 },
+        { name: "rain_agency", position: 3 }
+      ],
       panels: []
     };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    // event.persist();
+    this.setState(prevState => ({
+      layout: prevState.layout.map(item =>
+        item.name === event.target.name ? { ...item, position: event.target.value } : item
+      )
+    }));
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+
+    const formDOM = event.target;
+    const formValuesDOM = formDOM.elements;
+
+    this.setState(() => {
+      return { count: formValuesDOM.count.value };
+    });
+
+    this.getData();
   }
 
   toRight(event) {
@@ -388,29 +423,91 @@ class AppComponent extends React.Component {
   }
 
   reorder() {
+    const layoutOrdered = sort_by_key(this.state.layout, "position");
+
     this.setState({
-      panels: this.state.layout.map(order => {
-        switch (order) {
+      panels: layoutOrdered.map(order => {
+        switch (order.name) {
           case "versa_agency":
             return (
-              <div className="col-sm">
-                <button type="button" class="btn btn-primary mb-2" value="versa" onClick={this.toRight}>
-                  ->
-                </button>
-                <VersaTweets key="versa" />
-              </div>
+              <React.Fragment key="versa_agency">
+                <div className="col-sm">
+                  <form className="form-inline sort-panel" onSubmit={this.handleSubmit}>
+                    <label htmlFor="count" className="mr-sm-2">
+                      Position:
+                    </label>
+                    <input
+                      type="number"
+                      className="form-control mb-2 mr-sm-2"
+                      name="versa_agency"
+                      min="1"
+                      max="3"
+                      value={this.state.layout.find(item => item.name === "versa_agency").position}
+                      onChange={event => {
+                        event.persist();
+                        this.handleChange(event);
+                      }}
+                    />
+                    <button type="submit" className="btn btn-primary mb-2">
+                      Sort
+                    </button>
+                  </form>
+
+                  <VersaTweets />
+                </div>
+              </React.Fragment>
             );
           case "rain_agency":
             return (
-              <div className="col-sm">
-                <RainAgencyTweets key="rain_agency" />
-              </div>
+              <React.Fragment key="rain_agency">
+                <div className="col-sm">
+                  <form className="form-inline sort-panel" onSubmit={this.handleSubmit}>
+                    <label htmlFor="count" className="mr-sm-2">
+                      Position:
+                    </label>
+                    <input
+                      type="number"
+                      className="form-control mb-2 mr-sm-2"
+                      name="rain_agency"
+                      min="1"
+                      max="3"
+                      value={this.state.layout.find(item => item.name === "rain_agency").position}
+                      onChange={this.handleChange}
+                    />
+                    <button type="submit" className="btn btn-primary mb-2">
+                      Sort
+                    </button>
+                  </form>
+
+                  <RainAgencyTweets />
+                </div>
+              </React.Fragment>
             );
           case "alexa_devs":
             return (
-              <div className="col-sm">
-                <AlexaDevsTweets key="alexa_devs" />
-              </div>
+              <React.Fragment key="alexa_devs">
+                <div className="col-sm">
+                  <form className="form-inline sort-panel" onSubmit={this.handleSubmit}>
+                    <label htmlFor="count" className="mr-sm-2">
+                      Position:
+                    </label>
+                    <input
+                      type="number"
+                      className="form-control mb-2 mr-sm-2"
+                      name="alexa_devs"
+                      min="1"
+                      max="3"
+                      value={this.state.layout.find(item => item.name === "alexa_devs").position}
+                      onChange={this.handleChange}
+                    />
+                    <button type="submit" className="btn btn-primary mb-2">
+                      Sort
+                    </button>
+                  </form>
+
+                  <AlexaDevsTweets />
+                </div>
+              </React.Fragment>
             );
         }
       })
@@ -418,11 +515,11 @@ class AppComponent extends React.Component {
   }
 
   render() {
-    const ordered = this.state.panels.map(panel => panel);
+    const componentsOrdered = this.state.panels;
 
     return (
       <div className="container">
-        <div className="row">{ordered}</div>
+        <div className="row">{componentsOrdered}</div>
       </div>
     );
   }
