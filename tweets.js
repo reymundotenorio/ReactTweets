@@ -374,27 +374,55 @@ class AppComponent extends React.Component {
     super(props);
 
     this.state = {
-      order: []
+      layout: ["versa_agency", "alexa_devs", "rain_agency"],
+      panels: []
     };
   }
+
+  toRight(event) {
+    console.log("AQUII", event);
+  }
+
+  componentDidMount() {
+    this.reorder();
+  }
+
+  reorder() {
+    this.setState({
+      panels: this.state.layout.map(order => {
+        switch (order) {
+          case "versa_agency":
+            return (
+              <div className="col-sm">
+                <button type="button" class="btn btn-primary mb-2" value="versa" onClick={this.toRight}>
+                  ->
+                </button>
+                <VersaTweets key="versa" />
+              </div>
+            );
+          case "rain_agency":
+            return (
+              <div className="col-sm">
+                <RainAgencyTweets key="rain_agency" />
+              </div>
+            );
+          case "alexa_devs":
+            return (
+              <div className="col-sm">
+                <AlexaDevsTweets key="alexa_devs" />
+              </div>
+            );
+        }
+      })
+    });
+  }
+
   render() {
-    const { order } = this.state;
+    const ordered = this.state.panels.map(panel => panel);
 
     return (
       <div className="container">
-        <div className="row">
-          <div className="col-sm">
-            <VersaTweets key="versa" />
-          </div>
-
-          <div className="col-sm">
-            <RainAgencyTweets key="rain_agency" />
-          </div>
-
-          <div className="col-sm">
-            <AlexaDevsTweets key="alexa_devs" />
-          </div>
-        </div>
+        <div className="row">{ordered}</div>
       </div>
     );
   }
