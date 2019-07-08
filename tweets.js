@@ -1,5 +1,7 @@
-const API = "http://localhost:7890/1.1/statuses/user_timeline.json?count=30&screen_name=";
-const tweeterProfile = "versaagency";
+const getTweetsAPI = "http://localhost:7890/1.1/statuses/user_timeline.json?include_rts=true";
+const versaAgency = "VersaAgency";
+const rainAgency = "RainAgency";
+const alexaDevs = "alexadevs";
 
 // Tweet component
 class Tweet extends React.Component {
@@ -9,26 +11,40 @@ class Tweet extends React.Component {
         <p className="tweet-content">
           <b>{this.props.content}</b>
         </p>
-        <p className="tweet-date">
-          <small>{this.props.date}</small>
-        </p>
+        <p className="tweet-date text-right">{moment(this.props.date).format("MMMM Do YYYY, h:mm:ss a")}</p>
         <p className="tweet-link">
-          <a href={this.props.link} target="_blank">View tweet</a>
+          <a href={this.props.link} target="_blank">
+            View tweet
+          </a>
         </p>
       </div>
     );
   }
 }
 
-// Tweets parent component
-class Tweets extends React.Component {
+// Retweet component
+class Retweet extends React.Component {
+  render() {
+    return (
+      <div className="retweet-container">
+        <p className="retweet-content">
+          <b>It's a retweet of @{this.props.retweetUsername}</b>
+        </p>
+      </div>
+    );
+  }
+}
+
+// VersaTweets component
+class VersaTweets extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       tweets: [],
       isLoading: false,
-      error: null
+      error: null,
+      count: 30
     };
   }
 
@@ -36,7 +52,7 @@ class Tweets extends React.Component {
     this.setState({ isLoading: true });
 
     axios
-      .get(API + tweeterProfile)
+      .get(getTweetsAPI + "&count=" + this.state.count + "&screen_name=" + versaAgency)
       .then(result =>
         this.setState({
           tweets: result.data,
@@ -65,16 +81,23 @@ class Tweets extends React.Component {
 
     return (
       <React.Fragment>
-        <h2>Tweets ({tweets.length})</h2>
+        <h3>
+          {tweets.length > 0 ? tweets[0].user.name : ""} ({tweets.length})
+        </h3>
 
         {tweets.map(item => {
           return (
-            <Tweet
-              key={item.id_str}
-              content={item.text}
-              date={item.created_at}
-              link={`https://twitter.com/i/web/status/${item.id_str}`}
-            />
+            <React.Fragment>
+              {/* If is a retweet */}
+              {item.retweeted_status && <Retweet retweetUsername={item.retweeted_status.user.screen_name} />}
+
+              <Tweet
+                key={item.id_str}
+                content={item.text}
+                date={item.created_at}
+                link={`https://twitter.com/i/web/status/${item.id_str}`}
+              />
+            </React.Fragment>
           );
         })}
       </React.Fragment>
@@ -82,5 +105,149 @@ class Tweets extends React.Component {
   }
 }
 
-// Render Header component
-ReactDOM.render(<Tweets />, document.getElementById("tweets_container"));
+// RainAgencyTweets component
+class RainAgencyTweets extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      tweets: [],
+      isLoading: false,
+      error: null,
+      count: 30
+    };
+  }
+
+  componentDidMount() {
+    this.setState({ isLoading: true });
+
+    axios
+      .get(getTweetsAPI + "&count=" + this.state.count + "&screen_name=" + rainAgency)
+      .then(result =>
+        this.setState({
+          tweets: result.data,
+          isLoading: false
+        })
+      )
+      .catch(error =>
+        this.setState({
+          error,
+          isLoading: false
+        })
+      );
+  }
+
+  render() {
+    const { tweets, isLoading, error } = this.state;
+    console.log(tweets);
+
+    if (error) {
+      return <p>{error.message}</p>;
+    }
+
+    if (isLoading) {
+      return <p>Loading ...</p>;
+    }
+
+    return (
+      <React.Fragment>
+        <h3>
+          {tweets.length > 0 ? tweets[0].user.name : ""} ({tweets.length})
+        </h3>
+
+        {tweets.map(item => {
+          return (
+            <React.Fragment>
+              {/* If is a retweet */}
+              {item.retweeted_status && <Retweet retweetUsername={item.retweeted_status.user.screen_name} />}
+
+              <Tweet
+                key={item.id_str}
+                content={item.text}
+                date={item.created_at}
+                link={`https://twitter.com/i/web/status/${item.id_str}`}
+              />
+            </React.Fragment>
+          );
+        })}
+      </React.Fragment>
+    );
+  }
+}
+
+// AlexaDevsTweets component
+class AlexaDevsTweets extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      tweets: [],
+      isLoading: false,
+      error: null,
+      count: 30
+    };
+  }
+
+  componentDidMount() {
+    this.setState({ isLoading: true });
+
+    axios
+      .get(getTweetsAPI + "&count=" + this.state.count + "&screen_name=" + alexaDevs)
+      .then(result =>
+        this.setState({
+          tweets: result.data,
+          isLoading: false
+        })
+      )
+      .catch(error =>
+        this.setState({
+          error,
+          isLoading: false
+        })
+      );
+  }
+
+  render() {
+    const { tweets, isLoading, error } = this.state;
+    console.log(tweets);
+
+    if (error) {
+      return <p>{error.message}</p>;
+    }
+
+    if (isLoading) {
+      return <p>Loading ...</p>;
+    }
+
+    return (
+      <React.Fragment>
+        <h3>
+          {tweets.length > 0 ? tweets[0].user.name : ""} ({tweets.length})
+        </h3>
+
+        {tweets.map(item => {
+          return (
+            <React.Fragment>
+              {/* If is a retweet */}
+              {item.retweeted_status && <Retweet retweetUsername={item.retweeted_status.user.screen_name} />}
+
+              <Tweet
+                key={item.id_str}
+                content={item.text}
+                date={item.created_at}
+                link={`https://twitter.com/i/web/status/${item.id_str}`}
+              />
+            </React.Fragment>
+          );
+        })}
+      </React.Fragment>
+    );
+  }
+}
+
+// Render VersaTweets component
+ReactDOM.render(<VersaTweets />, document.getElementById("versa_tweets"));
+// Render RainAgencyTweets component
+ReactDOM.render(<RainAgencyTweets />, document.getElementById("rain_agency_tweets"));
+// Render AlexaDevsTweets component
+ReactDOM.render(<AlexaDevsTweets />, document.getElementById("alexa_devs_tweets"));

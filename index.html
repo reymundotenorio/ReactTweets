@@ -11,10 +11,19 @@
     <script crossorigin src="https://unpkg.com/react-dom@16.8.4/umd/react-dom.development.js"></script>
     <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script crossorigin src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
-    <h1>Frontend Coding Challenge</h1>
+    <!-- <h1>Frontend Coding Challenge</h1>
     <p>You're all set! Now let's get to the action!</p>
     <h2>Use React</h2>
     <p>
@@ -34,9 +43,23 @@
       The proxy server should be already running in the background. If you provided correct credentials for your Twitter
       API and Twitter Secret Key, you should now be able to use the api as the example below:
     </p>
-    <pre>http://localhost:7890/1.1/statuses/user_timeline.json?count=30&screen_name=versaagency</pre>
+    <pre>http://localhost:7890/1.1/statuses/user_timeline.json?count=30&screen_name=versaagency</pre> -->
 
-    <div id="tweets_container"></div>
+    <div id="app"></div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-sm">
+          <div id="versa_tweets"></div>
+        </div>
+        <div class="col-sm">
+          <div id="rain_agency_tweets"></div>
+        </div>
+        <div class="col-sm">
+          <div id="alexa_devs_tweets"></div>
+        </div>
+      </div>
+    </div>
 
     <!-- Load our React component. -->
     <script src="tweets.js" type="text/babel"></script>

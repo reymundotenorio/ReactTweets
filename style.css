@@ -1,0 +1,12 @@
+.tweet-container {
+  border-bottom: 1px solid #1B998B;
+  padding: 15px 0px;
+}
+
+.retweet-container{
+    padding-top: 15px;
+}
+
+.retweet-container .retweet-content{
+   color: #DB3A34;
+}
