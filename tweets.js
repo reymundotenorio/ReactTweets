@@ -46,9 +46,33 @@ class VersaTweets extends React.Component {
       error: null,
       count: 30
     };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+
+    const formDOM = event.target;
+    const formValuesDOM = formDOM.elements;
+
+    this.setState(() => {
+      return { count: formValuesDOM.count.value };
+    });
+
+    this.getData();
   }
 
   componentDidMount() {
+    this.getData();
+  }
+
+  getData() {
     this.setState({ isLoading: true });
 
     axios
@@ -69,7 +93,6 @@ class VersaTweets extends React.Component {
 
   render() {
     const { tweets, isLoading, error } = this.state;
-    console.log(tweets);
 
     if (error) {
       return <p>{error.message}</p>;
@@ -85,11 +108,29 @@ class VersaTweets extends React.Component {
           {tweets.length > 0 ? tweets[0].user.name : ""} ({tweets.length})
         </h3>
 
+        {/* Change Tweets count */}
+        <form className="form-inline" onSubmit={this.handleSubmit}>
+          <label for="count" className="mr-sm-2">
+            Tweets:
+          </label>
+          <input
+            type="number"
+            className="form-control mb-2 mr-sm-2"
+            name="count"
+            value={this.state.count}
+            onChange={this.handleChange}
+          />
+          <button type="submit" class="btn btn-primary mb-2">
+            Submit
+          </button>
+        </form>
+
         {tweets.map(item => {
           return (
             <React.Fragment>
-              {/* If is a retweet */}
-              {item.retweeted_status && <Retweet retweetUsername={item.retweeted_status.user.screen_name} />}
+              {item.retweeted_status && (
+                <Retweet key={`${item.id_str}_00`} retweetUsername={item.retweeted_status.user.screen_name} />
+              )}
 
               <Tweet
                 key={item.id_str}
@@ -116,9 +157,33 @@ class RainAgencyTweets extends React.Component {
       error: null,
       count: 30
     };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+
+    const formDOM = event.target;
+    const formValuesDOM = formDOM.elements;
+
+    this.setState(() => {
+      return { count: formValuesDOM.count.value };
+    });
+
+    this.getData();
   }
 
   componentDidMount() {
+    this.getData();
+  }
+
+  getData() {
     this.setState({ isLoading: true });
 
     axios
@@ -139,7 +204,6 @@ class RainAgencyTweets extends React.Component {
 
   render() {
     const { tweets, isLoading, error } = this.state;
-    console.log(tweets);
 
     if (error) {
       return <p>{error.message}</p>;
@@ -155,11 +219,29 @@ class RainAgencyTweets extends React.Component {
           {tweets.length > 0 ? tweets[0].user.name : ""} ({tweets.length})
         </h3>
 
+        {/* Change Tweets count */}
+        <form className="form-inline" onSubmit={this.handleSubmit}>
+          <label for="count" className="mr-sm-2">
+            Tweets:
+          </label>
+          <input
+            type="number"
+            className="form-control mb-2 mr-sm-2"
+            name="count"
+            value={this.state.count}
+            onChange={this.handleChange}
+          />
+          <button type="submit" class="btn btn-primary mb-2">
+            Submit
+          </button>
+        </form>
+
         {tweets.map(item => {
           return (
             <React.Fragment>
-              {/* If is a retweet */}
-              {item.retweeted_status && <Retweet retweetUsername={item.retweeted_status.user.screen_name} />}
+              {item.retweeted_status && (
+                <Retweet key={`${item.id_str}_00`} retweetUsername={item.retweeted_status.user.screen_name} />
+              )}
 
               <Tweet
                 key={item.id_str}
@@ -186,9 +268,33 @@ class AlexaDevsTweets extends React.Component {
       error: null,
       count: 30
     };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+
+    const formDOM = event.target;
+    const formValuesDOM = formDOM.elements;
+
+    this.setState(() => {
+      return { count: formValuesDOM.count.value };
+    });
+
+    this.getData();
   }
 
   componentDidMount() {
+    this.getData();
+  }
+
+  getData() {
     this.setState({ isLoading: true });
 
     axios
@@ -209,7 +315,6 @@ class AlexaDevsTweets extends React.Component {
 
   render() {
     const { tweets, isLoading, error } = this.state;
-    console.log(tweets);
 
     if (error) {
       return <p>{error.message}</p>;
@@ -225,11 +330,29 @@ class AlexaDevsTweets extends React.Component {
           {tweets.length > 0 ? tweets[0].user.name : ""} ({tweets.length})
         </h3>
 
+        {/* Change Tweets count */}
+        <form className="form-inline" onSubmit={this.handleSubmit}>
+          <label for="count" className="mr-sm-2">
+            Tweets:
+          </label>
+          <input
+            type="number"
+            className="form-control mb-2 mr-sm-2"
+            name="count"
+            value={this.state.count}
+            onChange={this.handleChange}
+          />
+          <button type="submit" class="btn btn-primary mb-2">
+            Submit
+          </button>
+        </form>
+
         {tweets.map(item => {
           return (
             <React.Fragment>
-              {/* If is a retweet */}
-              {item.retweeted_status && <Retweet retweetUsername={item.retweeted_status.user.screen_name} />}
+              {item.retweeted_status && (
+                <Retweet key={`${item.id_str}_00`} retweetUsername={item.retweeted_status.user.screen_name} />
+              )}
 
               <Tweet
                 key={item.id_str}
@@ -245,9 +368,37 @@ class AlexaDevsTweets extends React.Component {
   }
 }
 
-// Render VersaTweets component
-ReactDOM.render(<VersaTweets />, document.getElementById("versa_tweets"));
-// Render RainAgencyTweets component
-ReactDOM.render(<RainAgencyTweets />, document.getElementById("rain_agency_tweets"));
+// AlexaDevsTweets component
+class AppComponent extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      order: []
+    };
+  }
+  render() {
+    const { order } = this.state;
+
+    return (
+      <div className="container">
+        <div className="row">
+          <div className="col-sm">
+            <VersaTweets key="versa" />
+          </div>
+
+          <div className="col-sm">
+            <RainAgencyTweets key="rain_agency" />
+          </div>
+
+          <div className="col-sm">
+            <AlexaDevsTweets key="alexa_devs" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
 // Render AlexaDevsTweets component
-ReactDOM.render(<AlexaDevsTweets />, document.getElementById("alexa_devs_tweets"));
+ReactDOM.render(<AppComponent />, document.getElementById("app"));
